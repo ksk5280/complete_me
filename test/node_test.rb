@@ -8,14 +8,14 @@ class NodeTest < Minitest::Test
   end
 
   def test_can_create_instances
-    node = Node.new({"p":nil})
+    node = Node.new
     assert_instance_of Node, node
   end
 
   def test_node_initializes_with_values
-    node = Node.new({"p":nil})
+    node = Node.new
     assert_equal 0, node.depth
     assert_equal nil, node.word
-    assert_equal ({"p":nil}), node.link
+    assert_equal ({}), node.link
   end
 end

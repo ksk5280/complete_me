@@ -9,8 +9,8 @@
 5. What's the next most complex case?
   Inserting a few words and getting the correct suggestion
 6. Sketch the algorithm in pseudocode
-  Make an insert method that can take in a word and store it in an array or hash
-  Add a word using insert
+  Make an insert method that adds nodes to the trie letter by letter. Each letter will represent a new node and the last node or leaf will contain the word. The depth will be added as the index of the letter
+  Add a word using insert and verify that each node is made correctly
   Create a count method that returns number of words stored and should return 1
   Create a suggest method that can take a partial word and return the full word if it is in the hash
 7. Implement it

@@ -20,8 +20,5 @@ class CompleteMeTest < Minitest::Test
     assert_equal 0, complete.count
   end
 
-  def test_can_insert_word_and_count_words
-    complete.insert("word")
-    assert_equal 1, complete.count
-  end
+  
 end
