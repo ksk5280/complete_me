@@ -1,4 +1,6 @@
 require 'pry'
+require_relative 'node'
+require_relative 'trie'
 
 class CompleteMe
   attr_accessor :count

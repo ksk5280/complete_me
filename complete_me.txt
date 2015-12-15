@@ -46,3 +46,11 @@ Question: How will we parse a single emphasis marker within a line or markdown?
 Why: A line of Markdown may have an emphasis
 Input: Markdown like "this is *a sample*"
 Output: HTML like "this is <em>a sample</em>"
+
+Root: stores hash, every letter is a key that points to a node(value)
+
+Hashes are retrieved by unique keys more quickly than an array(one operation and you're done). An array is used if the order matters.
+
+Node: has a attributes of letter, word, and links to other nodes that are an empty hash by default, depth
+
+Trie: made up of nodes. Created when words are inserted
