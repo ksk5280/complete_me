@@ -1,0 +1,48 @@
+1. How will you know when the problem is solved?
+  When it passes the spec harness
+2. How will it be used? What goes in and what goes out?
+  Dictionary words go in. Partial or full words go in. Suggestions come out
+3. What's the most trivial use case?
+  Asking for empty string and having an empty string returned
+4. What's the minimum work case that demonstrates some functionality?
+  Insert one word. Having it return the same word as a suggestion
+5. What's the next most complex case?
+  Inserting a few words and getting the correct suggestion
+6. Sketch the algorithm in pseudocode
+  Make an insert method that can take in a word and store it in an array or hash
+  Add a word using insert
+  Create a count method that returns number of words stored and should return 1
+  Create a suggest method that can take a partial word and return the full word if it is in the hash
+7. Implement it
+
+8. Is the whole problem solved? If not, return to step 5
+
+9. Anticipate problems and edge cases
+
+10. Refactor and rethink
+
+TDD
+Unit Test - tests one component in isolation.
+  Question: How do I open the dictionary?
+    Input: /usr/share/dict/words
+    Output: list of words
+  Question: What is the format of the dictionary words?
+    Input:
+    Output:
+  Question:
+
+Integration Test - tests multiple interdependencies or coordinating components.
+  Question:
+
+Feature Test - a single feature as experienced by a user.
+  Question:
+
+Acceptance Test - a collection of user functionalities that delivers business value.
+  Question:
+
+Example:
+Type: Unit
+Question: How will we parse a single emphasis marker within a line or markdown?
+Why: A line of Markdown may have an emphasis
+Input: Markdown like "this is *a sample*"
+Output: HTML like "this is <em>a sample</em>"
