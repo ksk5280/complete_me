@@ -1,6 +1,6 @@
 language: ruby
 script: bundle exec mrspec --color
-rvm
+rvm:
   -2.2.1
 # addons:
 #   code_climate:
