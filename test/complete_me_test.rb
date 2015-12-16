@@ -4,9 +4,11 @@ require 'pry'
 require_relative 'test_helper'
 
 class CompleteMeTest < Minitest::Test
-  attr_reader :complete
+  attr_reader :root
+
   def setup
-    @complete = CompleteMe.new
+    @trie = CompleteMe.new
+    @dictionary = "/usr/share/dict/words"
   end
 
   def test_class_exists
@@ -14,26 +16,11 @@ class CompleteMeTest < Minitest::Test
   end
 
   def test_can_create_instances
-    assert_instance_of CompleteMe, complete
+    assert_instance_of CompleteMe, @trie
   end
 
   def test_count_starts_at_zero
-    assert_equal 0, complete.count
-  end
-
-  attr_reader :root
-
-  def setup
-    @trie = Trie.new
-    @dictionary = "/usr/share/dict/words"
-  end
-
-  def test_class_exists
-    assert Trie
-  end
-
-  def test_can_create_instances
-    assert_instance_of Trie, @trie
+    assert_equal 0, @trie.count
   end
 
   def test_trie_initializes_with_root_node
