@@ -21,9 +21,10 @@ class TrieTest < Minitest::Test
     assert_instance_of Node, @trie.root
   end
 
-  def test_inserted_letter_creates_link_key_at_root
-    @trie.insert("a")
-    assert @trie.root.link.has_key?("a")
+  def test_can_insert_one_word
+    @trie.insert("pizza")
+    assert @trie.root.link.has_key?("p")
+    assert_equal 1, @trie.count
   end
 
   def test_can_insert_two_words
@@ -31,6 +32,7 @@ class TrieTest < Minitest::Test
     @trie.insert("food")
     assert @trie.root.link.has_key?("p")
     assert @trie.root.link.has_key?("f")
+    assert_equal 2, @trie.count
   end
 
   def test_can_insert_three_words
@@ -38,5 +40,21 @@ class TrieTest < Minitest::Test
     @trie.insert("food")
     @trie.insert("pizzeria")
     assert_equal ["p", "f"], @trie.root.link.keys
+    assert_equal 3, @trie.count
+  end
+
+  def test_can_populate_dictionary
+    dictionary = "/usr/share/dict/words"
+    @trie.populate(dictionary)
+    assert_equal 235886, @trie.count
+  end
+
+  def test_can_suggest_words
+    @trie.insert("pizza")
+    @trie.insert("pizzeria")
+    @trie.insert("pizzicato")
+
+    expected = ["pizza", "pizzeria", "pizzicato"]
+    assert_equal expected, @trie.suggest("piz")
   end
 end

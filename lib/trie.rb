@@ -19,19 +19,28 @@ class Trie
       node = node.link[letter]
     end
     node.word = inserted_word
-    # binding.pry
   end
 
-  def method_name
+  def populate(read_file)
+    File.read(read_file).split.each do |word|
+      insert(word)
+    end
+  end
+
+  def suggest(substring)
 
   end
 end
 
 if __FILE__ == $0
   trie = Trie.new
-  trie.insert("pizza")
-  trie.insert("pizzeria")
-  trie.insert("food")
-  trie.root.link.keys # => ["p", "f"]
-  trie.count
+  # trie.insert("pizza")
+  # trie.insert("pizzeria")
+  # trie.insert("food")
+  # trie.root.link.keys # => ["p", "f"]
+  # trie.count # => 3
+  dictionary = "/usr/share/dict/words"
+  trie.populate(dictionary)
+  trie.count # => 235886
+  
 end
