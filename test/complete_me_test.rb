@@ -1,6 +1,7 @@
 require 'minitest'
 require 'complete_me'
 require 'pry'
+require_relative 'test_helper'
 
 class CompleteMeTest < Minitest::Test
   attr_reader :complete
@@ -20,5 +21,5 @@ class CompleteMeTest < Minitest::Test
     assert_equal 0, complete.count
   end
 
-  
+
 end

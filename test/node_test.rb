@@ -1,6 +1,7 @@
 require 'minitest'
 require 'pry'
 require 'node'
+require_relative 'test_helper'
 
 class NodeTest < Minitest::Test
   def test_class_exists

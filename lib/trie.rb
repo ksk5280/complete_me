@@ -2,7 +2,7 @@ require 'pry'
 require_relative 'node'
 
 class Trie
-  attr_reader :root, :count
+  attr_reader :root, :count, :weight
 
   def initialize
     @root = Node.new
@@ -12,8 +12,7 @@ class Trie
   def insert(inserted_word, node=root)
     @count += 1
     inserted_word.each_char do |letter|
-      if node.link.has_key?(letter)
-      else
+      if !node.link.has_key?(letter)
         node.link[letter] = Node.new
       end
       node = node.link[letter]
@@ -27,15 +26,19 @@ class Trie
     end
   end
 
-  def suggest(substring)
-    traverse_to_find_words(traverse_substring(substring))
+  def number_of_words_below_node(node=root)
+    traverse_branches_to_find_words(node).length
   end
 
-  def traverse_to_find_words(node=root)
+  def suggest(substring)
+    traverse_branches_to_find_words(traverse_substring(substring))
+  end
+
+  def traverse_branches_to_find_words(node=root)
     word_arr = []
     word_arr.push(node.word) if !node.word.nil?
     node.link.each do |key, value|
-      word_arr.concat(traverse_to_find_words(value))
+      word_arr.concat(traverse_branches_to_find_words(value))
     end
     word_arr
   end
@@ -45,6 +48,13 @@ class Trie
     node_link = node.link[substring.slice!(0)]
     return nil if node_link.nil?
     return traverse_substring(substring, node_link)
+  end
+
+  def select(selected_word)
+    node = traverse_substring(selected_word)
+    # binding.pry
+    node.weight += 1 # => 1
+    node # => #<Node:0x007fb3f0abbf70 @link={}, @word="pizza", @weight=1>
   end
 end
 
@@ -59,5 +69,6 @@ if __FILE__ == $0
   # dictionary = "/usr/share/dict/words"
   # trie.populate(dictionary)
   # trie.count # => 235886
-  trie.suggest("piz") # => ["pizza", "pizzeria", "pizzicato"]
+  # trie.suggest("piz") # => ["pizza", "pizzeria", "pizzicato"]
+  trie.select("pizza") # => #<Node:0x007fb3f0abbf70 @link={}, @word="pizza", @weight=1>
 end

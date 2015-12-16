@@ -1,8 +1,8 @@
 require 'pry'
 
 class Node
-  attr_reader :link, :weight
-  attr_accessor :word
+  attr_reader :link
+  attr_accessor :word, :weight
 
   def initialize(link = {}, word=nil, weight=0)
     @link = link
