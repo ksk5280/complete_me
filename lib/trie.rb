@@ -37,7 +37,7 @@ class Trie
   def traverse_branches_to_find_words(node=root)
     word_arr = []
     word_arr.push(node.word) if !node.word.nil?
-    node.link.each do |key, value|
+    node.link.each do |_, value|
       word_arr.concat(traverse_branches_to_find_words(value))
     end
     word_arr
@@ -52,9 +52,12 @@ class Trie
 
   def select(selected_word)
     node = traverse_substring(selected_word)
-    # binding.pry
-    node.weight += 1 # => 1
-    node # => #<Node:0x007fb3f0abbf70 @link={}, @word="pizza", @weight=1>
+    node.weight += 1
+    node
+  end
+
+  def delete
+
   end
 end
 
@@ -70,5 +73,5 @@ if __FILE__ == $0
   # trie.populate(dictionary)
   # trie.count # => 235886
   # trie.suggest("piz") # => ["pizza", "pizzeria", "pizzicato"]
-  trie.select("pizza") # => #<Node:0x007fb3f0abbf70 @link={}, @word="pizza", @weight=1>
+  trie.select("pizza")
 end
