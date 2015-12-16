@@ -1,11 +1,13 @@
 require 'pry'
 
 class Node
-  attr_reader :word, :depth, :link
-  def initialize(depth=0, word=nil, link = {})
-    @depth = depth
-    @word = word
+  attr_reader :link, :weight
+  attr_accessor :word
+
+  def initialize(link = {}, word=false, weight=0)
     @link = link
+    @word = word
+    @weight = weight
   end
 end
 
