@@ -20,8 +20,16 @@ class CompleteMe
     node.word = inserted_word
   end
 
+  def read_file(file_name)
+    file_handler = File.open("word_list.txt", "r") # =>
+    # file_handler.each_line do |line|
+    #   # insert into Trie?
+    # end
+    file_handler.close
+  end
+
   def populate(read_file)
-    File.read(read_file).split.each do |word|
+    read_file.split.each do |word|
       insert(word)
     end
   end
@@ -32,6 +40,8 @@ class CompleteMe
 
   def suggest(substring)
     traverse_branches_to_find_words(traverse_substring(substring))
+    # sort to have higher weights first
+
   end
 
   def traverse_branches_to_find_words(node=root)
@@ -50,7 +60,7 @@ class CompleteMe
     return traverse_substring(substring, node_link)
   end
 
-  def select(selected_word)
+  def select(suggested_word, selected_word)
     node = traverse_substring(selected_word)
     node.weight += 1
     node
@@ -64,14 +74,21 @@ end
 
 if __FILE__ == $0
   cm = CompleteMe.new
-  cm.insert("pizza")
-  cm.insert("pizzeria")
-  cm.insert("pizzicato")
+  # cm.insert("pizza")
+  # cm.insert("pizzeria")
+  # cm.insert("pizzicato")
   # cm.root.link.keys # => ["p", "f"]
   # cm.count # => 3
   # dictionary = "/usr/share/dict/words"
   # cm.populate(dictionary)
   # cm.count # => 235886
   # cm.suggest("piz") # => ["pizza", "pizzeria", "pizzicato"]
-  cm.select("pizza")
+  # cm.select("pizza")
+
+  filepath = File.expand_path("../../word_list.txt", __FILE__)
+  # => "/Users/kimiko/Documents/Turing/1module/projects/complete_me/word_list.txt"
+
+  word_list = File.read(filepath) # => "southbound\nsuperexcited\nmanostatic\nmaharawat\nshedlike\nannunciator\nuncontradictory\ncnidocil\ndictyoid\nvetust\nreg\ntarakihi\nsemidivided\nOvibos\ntemperative\nsubstrator\nalcyonarian\nElkesaite\noverleather\nbullfinch\n"
+  cm.populate(word_list)
+
 end

@@ -8,7 +8,6 @@ class CompleteMeTest < Minitest::Test
 
   def setup
     @trie = CompleteMe.new
-    @dictionary = "/usr/share/dict/words"
   end
 
   def test_class_exists
@@ -60,37 +59,32 @@ class CompleteMeTest < Minitest::Test
     assert_equal ["z"], actual
   end
 
-  def test_can_populate_dictionary
-    @trie.populate(@dictionary)
-    assert_equal 235886, @trie.count
+  def test_can_populate_words
+    @trie.populate("pizza\nhouse\ncar\ntree")
+    assert_equal 4, @trie.count
   end
 
   def test_can_count_words_in_the_tree
-    @trie.populate(@dictionary)
-    assert_equal 235886, @trie.number_of_words_below_node
-  end
-
-  def test_can_suggest_inserted_words
     @trie.insert("pizza")
     @trie.insert("pizzeria")
     @trie.insert("pizzicato")
+    @trie.insert("word")
+    @trie.insert("house")
+    @trie.insert("car")
+    @trie.insert("cat")
+    @trie.insert("dog")
+    @trie.insert("piano")
+    assert_equal 9, @trie.number_of_words_below_node
+  end
+
+  def test_can_suggest_words
+    @trie.insert("pizza")
+    @trie.insert("pizzeria")
+    @trie.insert("pizzicato")
+    @trie.insert("plate")
 
     expected = ["pizza", "pizzeria", "pizzicato"]
     assert_equal expected, @trie.suggest("piz")
-  end
-
-  def test_can_suggest_dictionary_words
-    @trie.populate(@dictionary)
-
-    expected = ["pize", "pizza", "pizzeria", "pizzicato", "pizzle"]
-    assert_equal expected, @trie.suggest("piz")
-  end
-
-  def test_can_suggest_dictionary_words
-    @trie.populate(@dictionary)
-
-    expected = ["zooxanthella", "zooxanthellae", "zooxanthin"]
-    assert_equal expected, @trie.suggest("zoox")
   end
 
   def test_can_add_weight_to_selected_words
