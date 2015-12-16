@@ -15,7 +15,7 @@ class NodeTest < Minitest::Test
   def test_node_initializes_with_values
     node = Node.new
     assert_equal 0, node.weight
-    assert_equal false, node.word
+    assert_equal nil, node.word
     assert_equal ({}), node.link
   end
 end

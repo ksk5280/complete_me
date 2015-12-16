@@ -27,33 +27,37 @@ class Trie
     end
   end
 
-  def words_starting_with(read_file)
-
+  def suggest(substring)
+    traverse_to_find_words(traverse_substring(substring))
   end
 
-  def suggest(substring)
-    # follow links to final link
-    node = root
-    substring.each_char do |letter|
-      if node.link.has_key?(letter)
-        node = node.link[letter]
-      end
+  def traverse_to_find_words(node=root)
+    word_arr = []
+    word_arr.push(node.word) if !node.word.nil?
+    node.link.each do |key, value|
+      word_arr.concat(traverse_to_find_words(value))
     end
-    node # => 
-    # then return top three results
+    word_arr
+  end
 
+  def traverse_substring(substring, node=root)
+    return node if substring.empty?
+    node_link = node.link[substring.slice!(0)]
+    return nil if node_link.nil?
+    return traverse_substring(substring, node_link)
   end
 end
+
 
 if __FILE__ == $0
   trie = Trie.new
   trie.insert("pizza")
   trie.insert("pizzeria")
-  trie.insert("food")
+  trie.insert("pizzicato")
   # trie.root.link.keys # => ["p", "f"]
   # trie.count # => 3
   # dictionary = "/usr/share/dict/words"
   # trie.populate(dictionary)
   # trie.count # => 235886
-  trie.suggest("piz")
+  trie.suggest("piz") # => ["pizza", "pizzeria", "pizzicato"]
 end

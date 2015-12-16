@@ -4,7 +4,7 @@ class Node
   attr_reader :link, :weight
   attr_accessor :word
 
-  def initialize(link = {}, word=false, weight=0)
+  def initialize(link = {}, word=nil, weight=0)
     @link = link
     @word = word
     @weight = weight
