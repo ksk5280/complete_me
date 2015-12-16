@@ -23,7 +23,9 @@ class TrieTest < Minitest::Test
 
   def test_can_insert_one_word
     @trie.insert("pizza")
+    # binding.pry
     assert @trie.root.link.has_key?("p")
+    assert @trie.root.link["p"].link.has_key?("i")
     assert_equal 1, @trie.count
   end
 
