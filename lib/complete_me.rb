@@ -2,15 +2,13 @@ require 'pry'
 require_relative 'node'
 
 class CompleteMe
-  attr_reader :root, :count, :weight
+  attr_reader :root, :weight
 
   def initialize
     @root = Node.new
-    @count = 0
   end
 
   def insert(inserted_word, node=root)
-    @count += 1
     inserted_word.each_char do |letter|
       if !node.link.has_key?(letter)
         node.link[letter] = Node.new
@@ -26,20 +24,14 @@ class CompleteMe
     end
   end
 
-  def count_words(node=root)
+  def count(node=root)
     find_words(node).length
   end
 
   def suggest(substring)
-    substring_node = traverse_substring(substring)
-    suggestions = find_words(substring_node)
-    sorted_nodes = suggestions.sort! do |a, b|
-      b.weight <=> a.weight
-    end
-    sorted_words = sorted_nodes.map do |node|
-      node.word
-    end
-    sorted_words
+    suggestions = find_words(traverse_substring(substring))
+    sorted_nodes = suggestions.sort! { |a, b| b.weight <=> a.weight }
+    sorted_words = sorted_nodes.map {|node| node.word }
   end
 
   def find_words(node=root)
@@ -64,27 +56,26 @@ class CompleteMe
     node
   end
 
-  def delete(word, node = root)
+  def delete(word_to_delete, node = root)
     index = 0
-    while suggest(word.slice(0..index)).length > 1
+    until suggest(word_to_delete.slice(0..index)).length == 1 || index == word_to_delete.length
       index += 1
     end
-    key_to_delete = word.slice(index)
-    node_to_delete_from = traverse_substring(word.slice(0..index-1))
-    node_to_delete_from.link.delete(key_to_delete)
+    substring_node = traverse_substring(word_to_delete.slice(0..index-1))
+    key_to_delete = word_to_delete.slice(index)
+    if key_to_delete.nil?
+      substring_node.word = nil
+    else
+      substring_node.link.delete(key_to_delete)
+    end
   end
 end
 
-
 if __FILE__ == $0
-  cm = CompleteMe.new
-  cm.insert("pizza")
-  cm.insert("pizzeria")
-  cm.insert("pizzicato")
-  cm.select("piz", "pizzeria")
-  cm.suggest("piz")
-  cm.delete("pizzeria")
-  # filepath = File.expand_path("../../word_list.txt", __FILE__)
-  # word_list = File.read(filepath)
-  # cm.populate(word_list)
+  trie = CompleteMe.new
+  trie.insert("pi")
+  trie.insert("pizza")
+  trie.insert("pizzeria")
+  trie.insert("pizzicato")
+  trie.delete("pi")
 end
