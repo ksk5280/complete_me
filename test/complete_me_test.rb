@@ -89,8 +89,17 @@ class CompleteMeTest < Minitest::Test
 
   def test_can_add_weight_to_selected_words
     @trie.insert("pizza")
-    assert_equal 1, @trie.select("pizza").weight
-    assert_equal 2, @trie.select("pizza").weight
-    assert_equal 3, @trie.select("pizza").weight
+    assert_equal 1, @trie.select("piz", "pizza").weight
+    assert_equal 2, @trie.select("piz", "pizza").weight
+    assert_equal 3, @trie.select("piz", "pizza").weight
+  end
+
+  def test_can_suggest_weighted_words_first
+    @trie.insert("pizza")
+    @trie.insert("pizzeria")
+    @trie.insert("pizzicato")
+    @trie.select("piz", "pizzeria")
+    expected = ["pizzeria", "pizza", "pizzicato"]
+    assert_equal expected, @trie.suggest("piz")
   end
 end

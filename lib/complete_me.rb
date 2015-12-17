@@ -20,13 +20,13 @@ class CompleteMe
     node.word = inserted_word
   end
 
-  def read_file(file_name)
-    file_handler = File.open("word_list.txt", "r") # =>
-    # file_handler.each_line do |line|
-    #   # insert into Trie?
-    # end
-    file_handler.close
-  end
+  # def read_file(file_name)
+  #   file_handler = File.open("word_list.txt", "r")
+  #   # file_handler.each_line do |line|
+  #   #   # insert into Trie?
+  #   # end
+  #   file_handler.close
+  # end
 
   def populate(read_file)
     read_file.split.each do |word|
@@ -39,19 +39,42 @@ class CompleteMe
   end
 
   def suggest(substring)
-    traverse_branches_to_find_words(traverse_substring(substring))
-    # sort to have higher weights first
-
+    suggestions = traverse_branches_to_find_words(traverse_substring(substring))
+    sorted = suggestions.sort! do |a, b|
+      b.weight <=> a.weight
+    end
+    sorted_words = sorted.map do |node|
+      node.word
+    end
+    sorted_words
   end
+
+  # def sort_node_array_by_weight(suggestions)
+  #   sorted = suggestions.map do |node|
+  #     node.weight
+  #   end
+  #   sorted.sort # => [0, 0, 1]
+  # end
 
   def traverse_branches_to_find_words(node=root)
     word_arr = []
-    word_arr.push(node.word) if !node.word.nil?
+    word_arr.push(node) if !node.word.nil?
+    # binding.pry
     node.link.each do |_, value|
       word_arr.concat(traverse_branches_to_find_words(value))
     end
     word_arr
   end
+
+  # def traverse_branches_to_find_words(node=root)
+  #   word_arr = []
+  #   word_arr.push({node.word => node.weight}) if !node.word.nil?
+  #   binding.pry
+  #   node.link.each do |_, value|
+  #     word_arr.concat(traverse_branches_to_find_words(value))
+  #   end
+  #   word_arr
+  # end
 
   def traverse_substring(substring, node=root)
     return node if substring.empty?
@@ -74,9 +97,9 @@ end
 
 if __FILE__ == $0
   cm = CompleteMe.new
-  # cm.insert("pizza")
-  # cm.insert("pizzeria")
-  # cm.insert("pizzicato")
+  cm.insert("pizza")
+  cm.insert("pizzeria")
+  cm.insert("pizzicato")
   # cm.root.link.keys # => ["p", "f"]
   # cm.count # => 3
   # dictionary = "/usr/share/dict/words"
@@ -85,10 +108,10 @@ if __FILE__ == $0
   # cm.suggest("piz") # => ["pizza", "pizzeria", "pizzicato"]
   # cm.select("pizza")
 
-  filepath = File.expand_path("../../word_list.txt", __FILE__)
-  # => "/Users/kimiko/Documents/Turing/1module/projects/complete_me/word_list.txt"
+  cm.select("piz", "pizzeria")
+  cm.suggest("piz") # => ["pizzeria", "pizza", "pizzicato"]
 
-  word_list = File.read(filepath) # => "southbound\nsuperexcited\nmanostatic\nmaharawat\nshedlike\nannunciator\nuncontradictory\ncnidocil\ndictyoid\nvetust\nreg\ntarakihi\nsemidivided\nOvibos\ntemperative\nsubstrator\nalcyonarian\nElkesaite\noverleather\nbullfinch\n"
-  cm.populate(word_list)
-
+  # filepath = File.expand_path("../../word_list.txt", __FILE__)
+  # word_list = File.read(filepath)
+  # cm.populate(word_list)
 end
