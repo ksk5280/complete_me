@@ -74,7 +74,7 @@ class CompleteMeTest < Minitest::Test
     @trie.insert("cat")
     @trie.insert("dog")
     @trie.insert("piano")
-    assert_equal 9, @trie.number_of_words_below_node
+    assert_equal 9, @trie.count_words
   end
 
   def test_can_suggest_words
@@ -101,5 +101,17 @@ class CompleteMeTest < Minitest::Test
     @trie.select("piz", "pizzeria")
     expected = ["pizzeria", "pizza", "pizzicato"]
     assert_equal expected, @trie.suggest("piz")
+  end
+
+  def test_can_delete_words
+    @trie.insert("pi")
+    @trie.insert("pizza")
+    @trie.insert("pizzeria")
+    @trie.insert("pizzicato")
+    assert_equal 4, @trie.count_words
+    @trie.delete("pizza")
+    assert_equal 3, @trie.count_words
+    @trie.delete("pizzeria")
+    assert_equal 2, @trie.count_words
   end
 end

@@ -20,61 +20,36 @@ class CompleteMe
     node.word = inserted_word
   end
 
-  # def read_file(file_name)
-  #   file_handler = File.open("word_list.txt", "r")
-  #   # file_handler.each_line do |line|
-  #   #   # insert into Trie?
-  #   # end
-  #   file_handler.close
-  # end
-
   def populate(read_file)
     read_file.split.each do |word|
       insert(word)
     end
   end
 
-  def number_of_words_below_node(node=root)
-    traverse_branches_to_find_words(node).length
+  def count_words(node=root)
+    find_words(node).length
   end
 
   def suggest(substring)
-    suggestions = traverse_branches_to_find_words(traverse_substring(substring))
-    sorted = suggestions.sort! do |a, b|
+    substring_node = traverse_substring(substring)
+    suggestions = find_words(substring_node)
+    sorted_nodes = suggestions.sort! do |a, b|
       b.weight <=> a.weight
     end
-    sorted_words = sorted.map do |node|
+    sorted_words = sorted_nodes.map do |node|
       node.word
     end
     sorted_words
   end
 
-  # def sort_node_array_by_weight(suggestions)
-  #   sorted = suggestions.map do |node|
-  #     node.weight
-  #   end
-  #   sorted.sort # => [0, 0, 1]
-  # end
-
-  def traverse_branches_to_find_words(node=root)
+  def find_words(node=root)
     word_arr = []
     word_arr.push(node) if !node.word.nil?
-    # binding.pry
     node.link.each do |_, value|
-      word_arr.concat(traverse_branches_to_find_words(value))
+      word_arr.concat(find_words(value))
     end
     word_arr
   end
-
-  # def traverse_branches_to_find_words(node=root)
-  #   word_arr = []
-  #   word_arr.push({node.word => node.weight}) if !node.word.nil?
-  #   binding.pry
-  #   node.link.each do |_, value|
-  #     word_arr.concat(traverse_branches_to_find_words(value))
-  #   end
-  #   word_arr
-  # end
 
   def traverse_substring(substring, node=root)
     return node if substring.empty?
@@ -83,14 +58,20 @@ class CompleteMe
     return traverse_substring(substring, node_link)
   end
 
-  def select(suggested_word, selected_word)
+  def select(_suggested_word, selected_word)
     node = traverse_substring(selected_word)
     node.weight += 1
     node
   end
 
-  def delete
-
+  def delete(word, node = root)
+    index = 0
+    while suggest(word.slice(0..index)).length > 1
+      index += 1
+    end
+    key_to_delete = word.slice(index)
+    node_to_delete_from = traverse_substring(word.slice(0..index-1))
+    node_to_delete_from.link.delete(key_to_delete)
   end
 end
 
@@ -100,17 +81,9 @@ if __FILE__ == $0
   cm.insert("pizza")
   cm.insert("pizzeria")
   cm.insert("pizzicato")
-  # cm.root.link.keys # => ["p", "f"]
-  # cm.count # => 3
-  # dictionary = "/usr/share/dict/words"
-  # cm.populate(dictionary)
-  # cm.count # => 235886
-  # cm.suggest("piz") # => ["pizza", "pizzeria", "pizzicato"]
-  # cm.select("pizza")
-
   cm.select("piz", "pizzeria")
-  cm.suggest("piz") # => ["pizzeria", "pizza", "pizzicato"]
-
+  cm.suggest("piz")
+  cm.delete("pizzeria")
   # filepath = File.expand_path("../../word_list.txt", __FILE__)
   # word_list = File.read(filepath)
   # cm.populate(word_list)
