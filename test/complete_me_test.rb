@@ -1,8 +1,6 @@
 require 'minitest'
 require 'complete_me'
 require 'pry'
-require 'pry-byebug'
-require 'pry-rescue'
 require_relative 'test_helper'
 
 class CompleteMeTest < Minitest::Test
